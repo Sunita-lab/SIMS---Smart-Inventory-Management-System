@@ -19,6 +19,7 @@ function Navbar() {
       <div style={{ display: 'flex', gap: '16px' }}>
         <Link to="/dashboard" style={{ color: 'white', textDecoration: 'none' }}>Dashboard</Link>
         <Link to="/products" style={{ color: 'white', textDecoration: 'none' }}>Products</Link>
+        <Link to="/suppliers" style={{ color: 'white', textDecoration: 'none' }}>Suppliers</Link>
         {/* Suppliers, Inventory, Reports links baad mein add karenge */}
       </div>
       <button onClick={handleLogout}>Logout</button>
