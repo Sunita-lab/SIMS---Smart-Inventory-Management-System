@@ -12,14 +12,26 @@ function ProductForm() {
     price: '',
     quantity: '',
     lowStockThreshold: 10,
+    supplier: '',
   });
+  const [suppliers, setSuppliers] = useState([]);
   const navigate = useNavigate();
   const { id } = useParams();
   const isEdit = Boolean(id);
 
   useEffect(() => {
+    API.get('/suppliers').then((res) => setSuppliers(res.data));
+  }, []);
+
+  useEffect(() => {
     if (isEdit) {
-      API.get(`/products/${id}`).then((res) => setFormData(res.data));
+      API.get(`/products/${id}`).then((res) => {
+        const data = res.data;
+        setFormData({
+          ...data,
+          supplier: data.supplier?._id || data.supplier || '',
+        });
+      });
     }
   }, [id]);
 
@@ -67,6 +79,20 @@ function ProductForm() {
               <input name="quantity" type="number" placeholder="Quantity" value={formData.quantity} onChange={handleChange} required className={inputClass} />
             </div>
             <input name="lowStockThreshold" type="number" placeholder="Low Stock Threshold" value={formData.lowStockThreshold} onChange={handleChange} className={inputClass} />
+
+            <select
+              name="supplier"
+              value={formData.supplier || ''}
+              onChange={handleChange}
+              className={inputClass}
+            >
+              <option value="">Select Supplier (optional)</option>
+              {suppliers.map((s) => (
+                <option key={s._id} value={s._id}>
+                  {s.name}
+                </option>
+              ))}
+            </select>
 
             <button
               type="submit"
