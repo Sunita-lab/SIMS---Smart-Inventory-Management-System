@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: 'https://sims-4njv.onrender.com/api',
 });
 
 // Interceptor: automatically attaches token with every request
