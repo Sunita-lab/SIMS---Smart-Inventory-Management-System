@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import API from '../api/axios';
+import Navbar from '../components/Navbar';
 
 function Dashboard() {
   const [stats, setStats] = useState({
@@ -10,7 +10,6 @@ function Dashboard() {
     lowStockCount: 0,
   });
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -26,25 +25,21 @@ function Dashboard() {
     fetchStats();
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/login');
-  };
-
-  if (loading) return <p>Loading dashboard...</p>;
-
   return (
-    <div style={{ padding: '20px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+    <div>
+      <Navbar />
+      <div style={{ padding: '20px' }}>
         <h2>Dashboard</h2>
-        <button onClick={handleLogout}>Logout</button>
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginTop: '24px' }}>
-        <StatCard title="Total Products" value={stats.totalProducts} />
-        <StatCard title="Total Suppliers" value={stats.totalSuppliers} />
-        <StatCard title="Total Stock" value={stats.totalStock} />
-        <StatCard title="Low Stock Alerts" value={stats.lowStockCount} highlight={stats.lowStockCount > 0} />
+        {loading ? (
+          <p>Loading dashboard...</p>
+        ) : (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginTop: '24px' }}>
+            <StatCard title="Total Products" value={stats.totalProducts} />
+            <StatCard title="Total Suppliers" value={stats.totalSuppliers} />
+            <StatCard title="Total Stock" value={stats.totalStock} />
+            <StatCard title="Low Stock Alerts" value={stats.lowStockCount} highlight={stats.lowStockCount > 0} />
+          </div>
+        )}
       </div>
     </div>
   );
