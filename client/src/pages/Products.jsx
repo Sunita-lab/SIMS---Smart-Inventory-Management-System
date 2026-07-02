@@ -34,6 +34,29 @@ function Products() {
     }
   };
 
+  const handleAdjustStock = async (product) => {
+  const changeType = window.prompt('Type "increase" or "decrease":');
+  if (!['increase', 'decrease'].includes(changeType)) {
+    alert('Invalid input');
+    return;
+  }
+  const amount = window.prompt('Enter amount:');
+  if (!amount || isNaN(amount)) {
+    alert('Invalid amount');
+    return;
+  }
+  try {
+    await API.post('/inventory/adjust', {
+      productId: product._id,
+      changeType,
+      amount: Number(amount),
+    });
+    fetchProducts();
+  } catch (error) {
+    alert(error.response?.data?.message || 'Error adjusting stock');
+  }
+};
+
   return (
     <div>
       <Navbar />
@@ -78,6 +101,7 @@ function Products() {
                   <td>
                     <Link to={`/products/edit/${p._id}`}>Edit</Link>{' '}
                     <button onClick={() => handleDelete(p._id)}>Delete</button>
+                    <button onClick={() => handleAdjustStock(p)}>Adjust Stock</button>
                   </td>
                 </tr>
               ))}

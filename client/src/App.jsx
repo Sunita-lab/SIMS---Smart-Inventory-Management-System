@@ -7,6 +7,7 @@ import Products from './pages/Products';
 import ProductForm from './pages/ProductForm';
 import Suppliers from './pages/Suppliers';
 import SupplierForm from './pages/SupplierForm';
+import InventoryLogs from './pages/InventoryLogs';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/suppliers" element={<ProtectedRoute><Suppliers /></ProtectedRoute>} />
         <Route path="/suppliers/add" element={<ProtectedRoute><SupplierForm /></ProtectedRoute>} />
         <Route path="/suppliers/edit/:id" element={<ProtectedRoute><SupplierForm /></ProtectedRoute>} />
+        <Route path="/inventory" element={<ProtectedRoute><InventoryLogs /></ProtectedRoute>} />
         <Route
           path="/dashboard"
           element={
