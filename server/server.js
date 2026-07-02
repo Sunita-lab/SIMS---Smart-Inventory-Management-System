@@ -6,6 +6,7 @@ require('dotenv').config();
 const authRoutes = require('./routes/authRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const productRoutes = require('./routes/productRoutes');
+const supplierRoutes = require('./routes/supplierRoutes');
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/suppliers', supplierRoutes);
 
 // Test route
 app.get('/', (req, res) => {
