@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Package, Users, Boxes, AlertTriangle } from 'lucide-react';
 import API from '../api/axios';
 import Navbar from '../components/Navbar';
 
@@ -25,38 +26,69 @@ function Dashboard() {
     fetchStats();
   }, []);
 
+  const cards = [
+    {
+      title: 'Total Products',
+      value: stats.totalProducts,
+      icon: <Package className="w-6 h-6 text-white" />,
+      gradient: 'from-indigo-500 to-indigo-700',
+    },
+    {
+      title: 'Total Suppliers',
+      value: stats.totalSuppliers,
+      icon: <Users className="w-6 h-6 text-white" />,
+      gradient: 'from-violet-500 to-purple-700',
+    },
+    {
+      title: 'Total Stock',
+      value: stats.totalStock,
+      icon: <Boxes className="w-6 h-6 text-white" />,
+      gradient: 'from-emerald-500 to-emerald-700',
+    },
+    {
+      title: 'Low Stock Alerts',
+      value: stats.lowStockCount,
+      icon: <AlertTriangle className="w-6 h-6 text-white" />,
+      gradient: 'from-amber-500 to-orange-600',
+    },
+  ];
+
   return (
-    <div>
+    <div className="min-h-screen bg-slate-100">
       <Navbar />
-      <div style={{ padding: '20px' }}>
-        <h2>Dashboard</h2>
+      <div className="max-w-7xl mx-auto px-6 py-10">
+        <div className="mb-8">
+        <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+        Dashboard
+       </h2>
+       <p className="text-slate-500 mt-1">
+       Here's an overview of your inventory today.
+      </p>
+      <div className="h-1 w-16 bg-gradient-to-r from-indigo-600 to-emerald-500 rounded-full mt-3"></div>
+      </div>
         {loading ? (
-          <p>Loading dashboard...</p>
+          <p className="text-slate-500">Loading dashboard...</p>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginTop: '24px' }}>
-            <StatCard title="Total Products" value={stats.totalProducts} />
-            <StatCard title="Total Suppliers" value={stats.totalSuppliers} />
-            <StatCard title="Total Stock" value={stats.totalStock} />
-            <StatCard title="Low Stock Alerts" value={stats.lowStockCount} highlight={stats.lowStockCount > 0} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {cards.map((c, i) => (
+              <div
+                key={i}
+                className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow overflow-hidden"
+              >
+                <div className={`bg-gradient-to-br ${c.gradient} p-5`}>
+                  <div className="w-11 h-11 bg-white/20 rounded-lg flex items-center justify-center backdrop-blur-sm">
+                    {c.icon}
+                  </div>
+                </div>
+                <div className="p-5">
+                  <p className="text-slate-500 text-sm">{c.title}</p>
+                  <h3 className="text-3xl font-bold text-slate-900 mt-1">{c.value}</h3>
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </div>
-    </div>
-  );
-}
-
-function StatCard({ title, value, highlight }) {
-  return (
-    <div
-      style={{
-        border: '1px solid #ddd',
-        borderRadius: '8px',
-        padding: '16px',
-        backgroundColor: highlight ? '#fff3cd' : '#fff',
-      }}
-    >
-      <p style={{ color: '#666', fontSize: '14px' }}>{title}</p>
-      <h3 style={{ fontSize: '28px', margin: '8px 0 0' }}>{value}</h3>
     </div>
   );
 }
