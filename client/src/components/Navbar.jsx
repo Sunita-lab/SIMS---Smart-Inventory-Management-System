@@ -21,6 +21,7 @@ function Navbar() {
         <Link to="/products" style={{ color: 'white', textDecoration: 'none' }}>Products</Link>
         <Link to="/suppliers" style={{ color: 'white', textDecoration: 'none' }}>Suppliers</Link>
         <Link to="/inventory" style={{ color: 'white', textDecoration: 'none' }}>Inventory</Link>
+        <Link to="/reports" style={{ color: 'white', textDecoration: 'none' }}>Reports</Link>
         {/* Suppliers, Inventory, Reports links baad mein add karenge */}
       </div>
       <button onClick={handleLogout}>Logout</button>

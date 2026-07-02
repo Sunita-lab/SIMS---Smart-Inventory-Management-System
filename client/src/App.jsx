@@ -8,6 +8,7 @@ import ProductForm from './pages/ProductForm';
 import Suppliers from './pages/Suppliers';
 import SupplierForm from './pages/SupplierForm';
 import InventoryLogs from './pages/InventoryLogs';
+import Reports from './pages/Reports';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/suppliers/add" element={<ProtectedRoute><SupplierForm /></ProtectedRoute>} />
         <Route path="/suppliers/edit/:id" element={<ProtectedRoute><SupplierForm /></ProtectedRoute>} />
         <Route path="/inventory" element={<ProtectedRoute><InventoryLogs /></ProtectedRoute>} />
+        <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
         <Route
           path="/dashboard"
           element={
