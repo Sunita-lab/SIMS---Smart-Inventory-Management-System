@@ -13,7 +13,10 @@ const reportRoutes = require('./routes/reportRoutes');
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:5173', 'https://sims-management.vercel.app'],
+  credentials: true,
+}));
 app.use(express.json());
 
 // Routes
