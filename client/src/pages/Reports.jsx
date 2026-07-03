@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { Package, IndianRupee, AlertTriangle } from 'lucide-react';
+import { Package, IndianRupee, AlertTriangle, ArrowUpCircle, ArrowDownCircle } from 'lucide-react';
 import API from '../api/axios';
 import Navbar from '../components/Navbar';
 
@@ -33,6 +33,7 @@ function Reports() {
   if (!reports) return null;
 
   const categoryData = Object.entries(reports.categoryBreakdown).map(([name, value]) => ({ name, value }));
+  const categoryValueData = Object.entries(reports.categoryValueBreakdown).map(([name, value]) => ({ name, value }));
 
   const summaryCards = [
     { title: 'Total Products', value: reports.totalProducts, icon: <Package className="w-6 h-6 text-white" />, gradient: 'from-indigo-500 to-indigo-700' },
@@ -67,8 +68,8 @@ function Reports() {
           ))}
         </div>
 
-        {/* Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
+        {/* Charts Row 1: Category count + Supplier count */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
             <h3 className="font-semibold text-slate-800 mb-4">Products by Category</h3>
             {categoryData.length > 0 ? (
@@ -103,6 +104,127 @@ function Reports() {
               <p className="text-slate-400 text-sm">No supplier data</p>
             )}
           </div>
+        </div>
+
+        {/* Charts Row 2: Category value + Top 5 products */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+            <h3 className="font-semibold text-slate-800 mb-4">Inventory Value by Category</h3>
+            {categoryValueData.length > 0 ? (
+              <ResponsiveContainer width="100%" height={280}>
+                <BarChart data={categoryValueData}>
+                  <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                  <YAxis allowDecimals={false} />
+                  <Tooltip formatter={(value) => `₹${value}`} />
+                  <Bar dataKey="value" fill="#10b981" radius={[6, 6, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <p className="text-slate-400 text-sm">No data</p>
+            )}
+          </div>
+
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+            <h3 className="font-semibold text-slate-800 mb-4">Top 5 Products by Value</h3>
+            {reports.topProducts.length > 0 ? (
+              <ResponsiveContainer width="100%" height={280}>
+                <BarChart data={reports.topProducts} layout="vertical">
+                  <XAxis type="number" allowDecimals={false} />
+                  <YAxis dataKey="name" type="category" tick={{ fontSize: 12 }} width={100} />
+                  <Tooltip formatter={(value) => `₹${value}`} />
+                  <Bar dataKey="value" fill="#8b5cf6" radius={[0, 6, 6, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <p className="text-slate-400 text-sm">No data</p>
+            )}
+          </div>
+        </div>
+
+        {/* Recent Activity Feed */}
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-10">
+          <div className="px-6 py-4 border-b border-slate-200">
+            <h3 className="font-semibold text-slate-800">Recent Activity</h3>
+          </div>
+          {reports.recentActivity.length > 0 ? (
+            <div className="divide-y divide-slate-100">
+              {reports.recentActivity.map((log) => (
+                <div key={log._id} className="px-6 py-3 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    {log.changeType === 'increase' ? (
+                      <ArrowUpCircle className="w-4 h-4 text-emerald-600" />
+                    ) : (
+                      <ArrowDownCircle className="w-4 h-4 text-red-500" />
+                    )}
+                    <span className="text-sm text-slate-700">
+                      <span className="font-medium">{log.productName}</span>{' '}
+                      {log.changeType === 'increase' ? 'increased by' : 'decreased by'}{' '}
+                      <span className="font-medium">{log.changeAmount}</span> by {log.updatedByName}
+                    </span>
+                  </div>
+                  <span className="text-xs text-slate-400">{new Date(log.createdAt).toLocaleString()}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="p-6 text-slate-500">No recent activity.</p>
+          )}
+        </div>
+
+        {/* Product Summary Table */}
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-10">
+          <div className="px-6 py-4 border-b border-slate-200">
+            <h3 className="font-semibold text-slate-800">Product Summary</h3>
+          </div>
+          <table className="w-full text-sm">
+            <thead className="bg-slate-50 border-b border-slate-200">
+              <tr>
+                <th className="text-left px-6 py-3 font-semibold text-slate-600">Name</th>
+                <th className="text-left px-6 py-3 font-semibold text-slate-600">Category</th>
+                <th className="text-left px-6 py-3 font-semibold text-slate-600">Price</th>
+                <th className="text-left px-6 py-3 font-semibold text-slate-600">Quantity</th>
+                <th className="text-left px-6 py-3 font-semibold text-slate-600">Value</th>
+                <th className="text-left px-6 py-3 font-semibold text-slate-600">Supplier</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {reports.productSummary.map((p) => (
+                <tr key={p._id} className="hover:bg-slate-50">
+                  <td className="px-6 py-3 font-medium text-slate-900">{p.name}</td>
+                  <td className="px-6 py-3 text-slate-600">{p.category}</td>
+                  <td className="px-6 py-3 text-slate-600">₹{p.price}</td>
+                  <td className="px-6 py-3 text-slate-600">{p.quantity}</td>
+                  <td className="px-6 py-3 font-medium text-emerald-700">₹{p.value}</td>
+                  <td className="px-6 py-3 text-slate-600">{p.supplierName}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Supplier Summary Table */}
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-10">
+          <div className="px-6 py-4 border-b border-slate-200">
+            <h3 className="font-semibold text-slate-800">Supplier Summary</h3>
+          </div>
+          <table className="w-full text-sm">
+            <thead className="bg-slate-50 border-b border-slate-200">
+              <tr>
+                <th className="text-left px-6 py-3 font-semibold text-slate-600">Supplier</th>
+                <th className="text-left px-6 py-3 font-semibold text-slate-600">Product Count</th>
+                <th className="text-left px-6 py-3 font-semibold text-slate-600">Total Value</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {reports.supplierBreakdown.map((s, i) => (
+                <tr key={i} className="hover:bg-slate-50">
+                  <td className="px-6 py-3 font-medium text-slate-900">{s.supplierName}</td>
+                  <td className="px-6 py-3 text-slate-600">{s.productCount}</td>
+                  <td className="px-6 py-3 font-medium text-emerald-700">₹{s.totalValue}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
         {/* Low Stock Table */}
