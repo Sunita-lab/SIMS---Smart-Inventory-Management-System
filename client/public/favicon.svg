@@ -1,0 +1,11 @@
+<svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradFav" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#4f46e5"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+  </defs>
+  <path d="M24 4L42 16V32L24 44L6 32V16L24 4Z" fill="url(#gradFav)"/>
+  <path d="M24 14L34 20V30L24 36L14 30V20L24 14Z" fill="white" fill-opacity="0.9"/>
+  <text x="24" y="29" font-family="Arial, sans-serif" font-size="14" font-weight="800" fill="#4f46e5" text-anchor="middle">S</text>
+</svg>

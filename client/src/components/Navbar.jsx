@@ -20,10 +20,7 @@ function Navbar() {
   return (
     <nav className="bg-slate-900 shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        <div>
-          <h1 className="text-white font-bold text-xl tracking-tight">SIMS</h1>
-          <p className="text-slate-400 text-xs">Smart Inventory Management System</p>
-        </div>
+        <img src="/logo.svg" alt="SIMS logo" className="h-10" />
 
         <div className="flex gap-6">
           {links.map((link) => (
